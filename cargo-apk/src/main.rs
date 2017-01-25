@@ -31,6 +31,7 @@ fn main() {
                     .arg(Arg::with_name("xlinker")
                             .long("Xlinker")
                             .allow_hyphen_values(true)
+                            .takes_value(true)
                             .help("Passes for gnu linker"))                                             
                     .get_matches();
 
