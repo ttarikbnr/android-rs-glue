@@ -1,12 +1,13 @@
 [package]
-name = "cargo-apk"
-version = "0.1.7"
 authors = ["Pierre Krieger <pierre.krieger1708@gmail.com>"]
-license = "MIT"
 description = "Cargo subcommand that allows you to build Android packages"
+license = "MIT"
+name = "cargo-apk"
 repository = "https://github.com/tomaka/android-rs-glue/tree/master/cargo-apk"
+version = "0.1.7"
 
 [dependencies]
+clap = "2.20.0"
 rustc-serialize = "0.3.19"
 term = "0.4.4"
 toml = "0.1.28"

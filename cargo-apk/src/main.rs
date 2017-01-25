@@ -1,7 +1,9 @@
 extern crate rustc_serialize;
 extern crate term;
 extern crate toml;
+extern crate clap;
 
+use clap::{App, Arg};
 use std::env;
 use std::path::Path;
 use std::path::PathBuf;
@@ -14,18 +16,30 @@ mod install;
 mod termcmd;
 
 fn main() {
-    let command = env::args().skip(2).next();
+    let matches = App::new( "    Cargo Apk")
+                    .about( "    About:  Apk builder subcommand for cargo")
+                    .author("    Author: https://github.com/tomaka")
+                    .arg(Arg::with_name("release")
+                            .long("release")
+                            .help("release build"))
+                    .arg(Arg::with_name("install")
+                            .help("install apk to the device(by using adb)"))
+                    .arg(Arg::with_name("bin")
+                            .long("bin")
+                            .help("binary options")
+                            .value_name("TARGET")
+                        )
+                            // .possible_values("") // TODO
+                    .get_matches();
 
     let current_manifest = current_manifest_path();
 
     // Fetching the configuration for the build.
     let mut config = config::load(&current_manifest);
-    config.release = env::args().any(|s| &s[..] == "--release");
-    if let Some(target_arg_index) = env::args().position(|s| &s[..] == "--bin") {
-        config.target = env::args().skip(target_arg_index + 1).next();
-    }
+    config.release = matches.is_present("release");
+    config.target  = matches.value_of("bin").map(|x| x.to_owned());
 
-    if command.as_ref().map(|s| &s[..]) == Some("install") {
+    if matches.is_present("install"){
         install::install(&current_manifest, &config);
     } else {
         build::build(&current_manifest, &config);
