@@ -61,8 +61,8 @@ pub struct Config {
     /// The name of the executable to compile.
     pub target: Option<String>,
 
-    /// DT_SONAME
-    pub soname: Option<String>,
+    /// Xlinker passes
+    pub gnu_linker_passes: Option<String>,
 }
 
 pub fn load(manifest_path: &Path) -> Config {
@@ -119,7 +119,7 @@ pub fn load(manifest_path: &Path) -> Config {
         application_attributes: manifest_content.as_ref().and_then(|a| map_to_string(a.application_attributes.clone())),
         activity_attributes: manifest_content.as_ref().and_then(|a| map_to_string(a.activity_attributes.clone())),
         target: None,
-        soname: None,
+        gnu_linker_passes: None,
     }
 }
 

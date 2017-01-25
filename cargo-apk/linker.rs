@@ -22,7 +22,13 @@ fn main() {
     let linker_output = env::var("CARGO_APK_LINKER_OUTPUT").unwrap();
     let lib_paths_output = env::var("CARGO_APK_LIB_PATHS_OUTPUT").unwrap();
     let libs_output = env::var("CARGO_APK_LIBS_OUTPUT").unwrap();
+    let linker_passes = if env::var("GNU_LINKER_PASSES").unwrap(); 
 
+    let linker_passes = if linker_passes != "0"{
+        format!("-Xlinker {}", linker_passes)
+    } else {
+        "".to_owned();
+    };
     // Write the arguments for the subcommand to pick up.
     {
         let mut lib_paths = File::create(Path::new(&lib_paths_output)).unwrap();
@@ -47,6 +53,7 @@ fn main() {
         .arg("-o").arg(linker_output)
         .arg("-shared")
         .arg("-Wl,-E")
+        .arg(linker_passes)
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
         .status().unwrap().code().unwrap() != 0

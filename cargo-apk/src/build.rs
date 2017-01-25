@@ -226,6 +226,7 @@ pub fn build(manifest_path: &Path, config: &Config) -> BuildResult {
             .env("TARGET_CC", gcc_path.as_os_str())          // Used by gcc-rs
             .env("TARGET_AR", ar_path.as_os_str())          // Used by gcc-rs
             .env("TARGET_CFLAGS", &format!("--sysroot {}", gcc_sysroot.to_string_lossy())) // Used by gcc-rs
+            .env("GNU_LINKER_PASSES", config.gnu_linker_passes.clone().unwrap_or("0".to_owned()))
             .execute();
 
         // Determine the list of library paths and libraries, and copy them to the right location.

@@ -30,12 +30,8 @@ fn main() {
                             .value_name("TARGET")) // .possible_values("") // TODO
                     .arg(Arg::with_name("xlinker")
                             .long("Xlinker")
-                            .help("Passes for gnu linker"))
-                    .arg(Arg::with_name("soname")
-                            .long("soname")
-                            .takes_value(true)
-                            .requires("xlinker")
-                            .hidden(true))                            
+                            .allow_hyphen_values(true)
+                            .help("Passes for gnu linker"))                                             
                     .get_matches();
 
     let current_manifest = current_manifest_path();
@@ -46,7 +42,7 @@ fn main() {
     config.target  = matches.value_of("bin").map(|x| x.to_owned());
 
     if matches.is_present("xlinker"){
-        config.soname = matches.value_of("soname").map(|x| x.to_owned());
+        config.gnu_linker_passes = matches.value_of("xlinker").map(|x| x.to_owned());
     }
 
     if matches.is_present("install"){
