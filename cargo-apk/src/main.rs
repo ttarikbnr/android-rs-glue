@@ -21,15 +21,21 @@ fn main() {
                     .author("    Author: https://github.com/tomaka")
                     .arg(Arg::with_name("release")
                             .long("release")
-                            .help("release build"))
+                            .help("Release build"))
                     .arg(Arg::with_name("install")
                             .help("install apk to the device(by using adb)"))
                     .arg(Arg::with_name("bin")
                             .long("bin")
-                            .help("binary options")
-                            .value_name("TARGET")
-                        )
-                            // .possible_values("") // TODO
+                            .help("Binary options")
+                            .value_name("TARGET")) // .possible_values("") // TODO
+                    .arg(Arg::with_name("xlinker")
+                            .long("Xlinker")
+                            .help("Passes for gnu linker"))
+                    .arg(Arg::with_name("soname")
+                            .long("soname")
+                            .takes_value(true)
+                            .requires("xlinker")
+                            .hidden(true))                            
                     .get_matches();
 
     let current_manifest = current_manifest_path();
@@ -38,6 +44,10 @@ fn main() {
     let mut config = config::load(&current_manifest);
     config.release = matches.is_present("release");
     config.target  = matches.value_of("bin").map(|x| x.to_owned());
+
+    if matches.is_present("xlinker"){
+        config.soname = matches.value_of("soname").map(|x| x.to_owned());
+    }
 
     if matches.is_present("install"){
         install::install(&current_manifest, &config);
