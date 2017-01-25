@@ -27,7 +27,7 @@ fn main() {
     let linker_passes = if linker_passes != "0"{
         format!("-Xlinker {}", linker_passes)
     } else {
-        "".to_owned();
+        "".to_owned()
     };
     // Write the arguments for the subcommand to pick up.
     {
